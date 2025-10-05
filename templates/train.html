@@ -1,0 +1,12 @@
+<form action="/add_song" method="post" enctype="multipart/form-data">
+  <label>🎵 Upload Song:</label>
+  <input type="file" name="file" accept=".mp3,.wav" required><br><br>
+
+  <label>📊 Is the song popular?</label>
+  <select name="popularity_label" required>
+    <option value="1">✅ Popular</option>
+    <option value="0">❌ Not Popular</option>
+  </select><br><br>
+
+  <button type="submit">Add to Archive</button>
+</form>

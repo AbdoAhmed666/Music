@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>🎼 Generation Result</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#0b1220; color:#e6eef8; font-family:Inter, sans-serif; padding:30px; }
+    .card { background:#0f1724; border-radius:12px; padding:20px; }
+    a.btn { background:#1db954; color:#021; padding:10px 16px; border-radius:8px; font-weight:700; text-decoration:none; display:inline-block; margin:6px; }
+    pre { background:#071018; padding:10px; border-radius:8px; overflow:auto; color:#cfeee0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>✅ Melody Generated Successfully</h2>
+
+      {% if original_song %}
+        <h4>🎵 Original Song</h4>
+        <audio controls style="width:100%; margin:10px 0;">
+          <source src="{{ original_song }}" type="audio/mpeg">
+          Your browser does not support the audio player.
+        </audio>
+      {% endif %}
+
+      <h4>🎹 Generated Melody</h4>
+      <p>MIDI File: <a class="btn" href="{{ midi_path }}" download>Download MIDI</a></p>
+      {% if wav_path %}
+        <p>WAV File: <a class="btn" href="{{ wav_path }}" download>Download WAV</a></p>
+        <audio controls style="width:100%; margin-top:10px;">
+          <source src="{{ wav_path }}" type="audio/wav">
+          Your browser does not support the audio player.
+        </audio>
+        <audio controls>
+          <source src="{{ vocals_path }}" type="audio/wav">
+        </audio>
+
+      {% else %}
+        <p class="text-muted">⚠️ WAV not generated — please install Fluidsynth and add a SoundFont file.</p>
+      {% endif %}
+
+      <h4>🔎 Extracted Features</h4>
+      <pre>{{ features }}</pre>
+
+      <a class="btn mt-3" href="/">🔙 Back to Dashboard</a>
+    </div>
+  </div>
+</body>
+</html>

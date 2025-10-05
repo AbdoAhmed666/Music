@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+music/
+venv/
+.env/
+*.env
+
+# Audio files and data
+*.mp3
+*.wav
+*.csv
+*.npy
+*.pkl
+*.h5
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Generated files
+/static/generated/*
+/instance/*
+/__pycache__/*
+
+# IDE files
+.vscode/
+.idea/

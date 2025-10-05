@@ -1,0 +1,42 @@
+# --- Python general ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# --- Virtual Environment ---
+music/
+env/
+venv/
+.venv/
+
+# --- Data & Models ---
+*.h5
+*.pkl
+*.joblib
+*.sav
+*.npy
+*.npz
+*.csv
+*.json
+*.sqlite3
+*.db
+
+# --- Audio Files ---
+*.mp3
+*.wav
+*.flac
+*.ogg
+*.m4a
+static/generated/
+
+# --- System / IDE files ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.bak
+
+# --- Jupyter / Notebooks ---
+*.ipynb_checkpoints/

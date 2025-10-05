@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-multipart
+librosa
+soundfile
+numpy
+scipy
+matplotlib
+joblib
+scikit-learn
+jinja2
+pretty_midi 
+mido 
+numpy
+yFluidSynth
+spleeter

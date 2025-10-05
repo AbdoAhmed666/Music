@@ -1,0 +1,126 @@
+<!-- templates/identify.html -->
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>🎤 Song Recognition - Sing for Me</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Inter, sans-serif; background: #0b1220; color: #e6eef8; padding: 30px; }
+    .card { background: #0f1724; border-radius: 12px; padding: 20px; }
+    .btn-rec { background: #1db954; color: #021; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; }
+    .btn-upload { background: #0b84ff; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; }
+    #recordingsList audio { width: 100%; margin-top: 8px; }
+    .small-muted { color: #94a3b8; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>🎤 Sing or Upload a Recording</h2>
+      <p class="small-muted">
+        Record 5–10 seconds of your melody or song, then press “Identify” to find the original song name.
+      </p>
+
+      <!-- Upload Audio File -->
+      <form id="uploadForm" action="/identify" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Upload Audio</label>
+          <input class="form-control" type="file" name="file" accept="audio/*">
+        </div>
+        <button type="submit" class="btn btn-upload">⬆️ Upload & Identify</button>
+      </form>
+
+      <hr style="border-color:#1f2833"/>
+
+      <!-- Record from Microphone -->
+      <div>
+        <button id="recordBtn" class="btn-rec">🔴 Record Now</button>
+        <button id="stopBtn" class="btn btn-outline-light" disabled>⏹️ Stop</button>
+        <button id="sendBtn" class="btn btn-outline-success" disabled>📤 Send to Identify</button>
+        <div id="status" style="margin-top:10px" class="small-muted">Status: Ready</div>
+        <div id="recordingsList" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+let mediaRecorder, recordedBlobs;
+const recordBtn = document.getElementById('recordBtn');
+const stopBtn = document.getElementById('stopBtn');
+const sendBtn = document.getElementById('sendBtn');
+const status = document.getElementById('status');
+const recordingsList = document.getElementById('recordingsList');
+
+recordBtn.addEventListener('click', async () => {
+  recordBtn.disabled = true;
+  stopBtn.disabled = false;
+  sendBtn.disabled = true;
+  recordedBlobs = [];
+  status.textContent = '🎙️ Recording in progress...';
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    // Choose codec type for proper recording
+    let options = { mimeType: 'audio/webm;codecs=opus' };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      options = { mimeType: 'audio/webm' };
+    }
+    mediaRecorder = new MediaRecorder(stream, options);
+
+    mediaRecorder.ondataavailable = e => {
+      if (e.data && e.data.size > 0) {
+        recordedBlobs.push(e.data);
+        console.log("🎶 Data chunk size:", e.data.size); // Debug
+      }
+    };
+
+    mediaRecorder.onstop = () => {
+      console.log("✅ Recording stopped. Number of chunks:", recordedBlobs.length); // Debug
+      const blob = new Blob(recordedBlobs, { type: options.mimeType });
+      const url = URL.createObjectURL(blob);
+      recordingsList.innerHTML = '';
+      const audio = document.createElement('audio');
+      audio.controls = true;
+      audio.src = url;
+      recordingsList.appendChild(audio);
+    };
+
+    mediaRecorder.start();
+  } catch (err) {
+    console.error(err);
+    status.textContent = '❌ Failed to access the microphone';
+    recordBtn.disabled = false;
+    stopBtn.disabled = true;
+  }
+});
+
+stopBtn.addEventListener('click', () => {
+  mediaRecorder.stop();
+  stopBtn.disabled = true;
+  recordBtn.disabled = false;
+  sendBtn.disabled = false;
+  status.textContent = '🟢 Recording completed – you can now listen or send it.';
+});
+
+sendBtn.addEventListener('click', async () => {
+  sendBtn.disabled = true;
+  status.textContent = '⏳ Uploading and processing the file...';
+  const blob = new Blob(recordedBlobs, { type: 'audio/webm;codecs=opus' });
+  const fd = new FormData();
+  fd.append('file', blob, 'recording.webm');
+
+  try {
+    const res = await fetch('/identify', { method: 'POST', body: fd });
+    const html = await res.text();
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (e) {
+    console.error(e);
+    status.textContent = '❌ An error occurred during upload';
+  }
+});
+</script>
+</body>
+</html>

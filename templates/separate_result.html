@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>🎤 Result of song separation </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#0b1220; color:#e6eef8; font-family: 'Cairo', sans-serif; padding:40px; }
+    .card { background:#111a2b; border-radius:16px; padding:30px; box-shadow:0 6px 20px rgba(0,0,0,0.5); }
+    h2 { color:#1db954; font-weight:800; margin-bottom:25px; }
+    h5 { margin-top:25px; font-weight:700; color:#ffcc70; }
+    audio { width:100%; margin-top:10px; border-radius:8px; }
+    .btn-custom { background:#1db954; color:#021; padding:10px 20px; border-radius:10px; font-weight:700; text-decoration:none; transition:0.3s; }
+    .btn-custom:hover { background:#18a84b; color:white; }
+    .track-block { margin-bottom:30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2 class="text-center"> The song was successfully separated.</h2>
+
+      <!-- 🎤 singer voice -->
+      <div class="track-block">
+        <h5>🎤 The singer's voice </h5>
+        <audio controls>
+          <source src="{{ vocals_path }}" type="audio/wav">
+        </audio>
+        <p><a class="btn-custom" href="{{ vocals_path }}" download>⬇ Download audio</a></p>
+      </div>
+
+      <!-- 🥁 Drums -->
+      <div class="track-block">
+        <h5>🥁 The Drums</h5>
+        <audio controls>
+          <source src="{{ drums_path }}" type="audio/wav">
+        </audio>
+        <p><a class="btn-custom" href="{{ drums_path }}" download>⬇ Download drums</a></p>
+      </div>
+
+      <!-- 🎸 bass -->
+      <div class="track-block">
+        <h5>🎸 The bus</h5>
+        <audio controls>
+          <source src="{{ bass_path }}" type="audio/wav">
+        </audio>
+        <p><a class="btn-custom" href="{{ bass_path }}" download>⬇ Load the bus </a></p>
+      </div>
+
+      <!-- 🎶 Rest of the music -->
+      <div class="track-block">
+        <h5>🎶 The rest of the music</h5>
+        <audio controls>
+          <source src="{{ other_path }}" type="audio/wav">
+        </audio>
+        <p><a class="btn-custom" href="{{ other_path }}" download>⬇ Download the rest of the music</a></p>
+      </div>
+
+      <div class="text-center mt-4">
+        <a class="btn-custom" href="/">⬅ Go back Home Page</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
